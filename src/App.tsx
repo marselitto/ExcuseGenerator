@@ -1,72 +1,41 @@
-import './App.css'
-import {useState} from "react";
+import { useState } from 'react';
+import ExcuseForm from './ExcuseForm';
+import ExcuseList from './ExcuseList';
+import './App.css';
 
-interface FormData {
+export interface Excuse {
+  id: number;
   name: string;
-  powod: string;
-  wiarygodnosc: string;
-  data: string;
-  kreatywnosc: string;
-  komentarz: string;
-  pilna: boolean;
+  reason: string;
+  credibility: number;
+  date: string;
+  creativity: string;
+  details: string;
+  urgent: boolean;
 }
-
 
 function App() {
+  const [excuses, setExcuses] = useState<Excuse[]>([]);
 
-  const Form = () => {
-    const [formData, setFormData] = useState<FormData>({
-      data: "",
-      komentarz: "",
-      kreatywnosc: "",
-      pilna: false,
-      wiarygodnosc: "",
-      name: "", powod: "" });
-
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-
-  }
-
-
+  const addExcuse = (excuse: Omit<Excuse, 'id'>) => {
+    const newExcuse = {
+      ...excuse,
+      id: Date.now()
+    };
+    setExcuses([...excuses, newExcuse]);
+  };
 
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <p>Podaj imie</p>
-        <input type={"text"} name={"name"}/>
-        <br/>
-        <p>Podaj donwod wymowki</p>
-        <select name={"powod"}>
-          <option selected disabled>Wybierz powód</option>
-          <option value={"spoznienie"}>Spóźnienie</option>
-          <option value={"pracadomowa"}>Niedostarczenie pracy domowej</option>
-          <option value={"brakodp"}>Brak odpowiedzi na wiadomość</option>
-        </select>
-        <br/>
-        <p>Poziom wiarygodnosci</p>
-        <input type={"range"} name={"wiarygodnosc"} min={0} max={6}/>
-        <br/>
-        <p>Data wydarzenia</p>
-        <input type={"date"} name={"data"}/>
-        <br/>
-        <p>Poziom kreatywnosci</p>
-        <select value={"kreatywnosc"}>
-            <option selected disabled>Wybierz poziom</option>
-        </select>
-        <br/>
-        <p>Dodatkowe szczegoly</p>
-        <textarea placeholder={"Dodaj swoj komentarz"} name={"komentarz"}/>
-        <br/>
-        <label>
-          Pilna wymówka:
-          <input type={"checkbox"} name={"pilna"}/>
-        </label>
-        <br/>
-        <button type='submit'>Submit</button>
-      </form>
-    </>
-  )
+      <div className="app">
+        <header className="app-header">
+          <h1>Excuse Generator</h1>
+        </header>
+        <main>
+          <ExcuseForm onSubmit={addExcuse} />
+          <ExcuseList excuses={excuses} />
+        </main>
+      </div>
+  );
 }
 
-export default App
+export default App;
