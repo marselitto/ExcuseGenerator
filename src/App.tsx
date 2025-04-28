@@ -4,7 +4,6 @@ import ExcuseList from './ExcuseList';
 import './App.css';
 
 export interface Excuse {
-  id: number;
   name: string;
   reason: string;
   credibility: number;
@@ -17,24 +16,20 @@ export interface Excuse {
 function App() {
   const [excuses, setExcuses] = useState<Excuse[]>([]);
 
-  const addExcuse = (excuse: Omit<Excuse, 'id'>) => {
-    const newExcuse = {
-      ...excuse,
-      id: Date.now()
-    };
-    setExcuses([...excuses, newExcuse]);
+  const addExcuse = (excuse: Excuse) => {
+    setExcuses([...excuses, excuse]);
   };
 
   return (
-      <div className="app">
-        <header className="app-header">
-          <h1>Excuse Generator</h1>
-        </header>
-        <main>
-          <ExcuseForm onSubmit={addExcuse} />
-          <ExcuseList excuses={excuses} />
-        </main>
-      </div>
+    <div className="app">
+      <header className="app-header">
+        <h1>Excuse Generator</h1>
+      </header>
+      <main>
+        <ExcuseForm onSubmit={addExcuse} />
+        <ExcuseList excuses={excuses} />
+      </main>
+    </div>
   );
 }
 
